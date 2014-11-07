@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.name        = "sheepla"
   s.version     = Sheepla::VERSION
   s.authors     = ["Marcin Jan Adamczyk"]
-  s.email       = ["adamczyk.marcin@outlook.com"]
+  s.email       = ["marcin.adamczyk@subcom.me"]
   s.homepage    = "http://www.subcom.me/"
   s.summary     = "Sheepla API wrapper"
   s.description = "Sheepla API wrapper"
@@ -18,6 +18,7 @@ Gem::Specification.new do |s|
   s.test_files = Dir["test/**/*"]
 
   s.add_dependency "nokogiri", "~> 1.6.4"
+  s.add_dependency "rails", "~> 4.0.0"
 
   s.add_development_dependency "sqlite3"
 end
