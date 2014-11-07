@@ -16,10 +16,10 @@ module Sheepla
     end
 
     def order_synchronization(params)
-      connection()
       body = Nokogiri::XML::Builder.new do |xml|
         authentication(xml)
       end
+      
       request_method(body)
     end
 
@@ -31,14 +31,15 @@ module Sheepla
         end
       end
 
-      def connection(method)
-        @uri = URI.parse(BASE_URL + "#{method}")
+      def connection
+        @uri = URI.parse(BASE_URL)
         @http = Net::HTTP.new(uri.host, uri.port)
         @http.use_ssl = true
       end
 
 
       def request_method(params)
+        connection()
         request = Net::HTTP::Post.new(@uri.request_uri)
         request['content-type'] = 'text/xml'
         request['content-length'] = params.to_s.size
