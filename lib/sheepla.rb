@@ -83,7 +83,7 @@ module Sheepla
                 xml.externalPaymentTypeName order['external_payment_type_name']
                 xml.externalCarrierName order['external_carrier_name']
                 xml.externalCarrierId order['external_carrier_id']
-                xml.externalCountyId order['external_country_id']
+                xml.externalCountryId order['external_country_id']
                 xml.externalBuyerId order['external_buyer_id']
                 xml.externalOrderId order['external_order_id']
                 xml.shipmentTemplate order['shipment_template']
