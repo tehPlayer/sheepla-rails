@@ -28,8 +28,9 @@ module Sheepla
     end
 
     def create_order(params)
-      raise ApiError.new("Order parameters don't contain all obligatory keys") unless validate_order(params)
-      order = params.clone
+      order = params.clone.deep_stringify_keys
+
+      raise ApiError.new("Order parameters don't contain all obligatory keys") unless validate_order(order)
 
       connection('createOrder')
 
@@ -51,7 +52,7 @@ module Sheepla
               xml.externalOrderId order['external_order_id']
               xml.shipmentTemplate order['shipment_template']
               xml.comments order['comments']
-              xml.createdOn order['created_on']
+              xml.createdOn order['created_on'].to_s
               xml.deliveryPrice order['delivery_price']
               xml.deliveryPriceCurrency order['delivery_price_currency']
               xml.deliveryAddress do
