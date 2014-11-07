@@ -18,7 +18,7 @@ module Sheepla
 
     def get_metro_stations
       connection('getMetroStations')
-      body = Nokogiri::XML::Builder.new do |xml|
+      body = Nokogiri::XML::Builder.new(encoding: 'utf-8') do |xml|
         xml.getMetroStationsRequest xmlns: "http://www.sheepla.pl/webapi/1_0" do
           authentication(xml)
         end
@@ -70,7 +70,7 @@ module Sheepla
       end
 
       def build_order(order)
-        Nokogiri::XML::Builder.new do |xml|
+        Nokogiri::XML::Builder.new(encoding: 'utf-8') do |xml|
           xml.createOrderRequest xmlns: "http://www.sheepla.pl/webapi/1_0" do
             authentication(xml)
             xml.orders do
@@ -81,8 +81,8 @@ module Sheepla
                 xml.externalDeliveryTypeName order['external_delivery_type_name']
                 xml.externalPaymentTypeId order['external_payment_type_id']
                 xml.externalPaymentTypeName order['external_payment_type_name']
-                xml.externalCarrierId order['external_carrier_id']
                 xml.externalCarrierName order['external_carrier_name']
+                xml.externalCarrierId order['external_carrier_id']
                 xml.externalCountyId order['external_country_id']
                 xml.externalBuyerId order['external_buyer_id']
                 xml.externalOrderId order['external_order_id']
