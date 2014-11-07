@@ -15,11 +15,21 @@ module Sheepla
       @api_key = api_key
     end
 
+    def get_metro_stations
+      body = Nokogiri::XML::Builder.new do |xml|
+        xml.getMetroStationsRequest xmlns: "http://www.sheepla.pl/webapi/1_0" do
+          authentication(xml)
+        end
+      end
+
+      request_method(body)
+    end
+
     def order_synchronization(params)
       body = Nokogiri::XML::Builder.new do |xml|
         authentication(xml)
       end
-      
+
       request_method(body)
     end
 
@@ -34,16 +44,16 @@ module Sheepla
       def connection
         @uri = URI.parse(BASE_URL)
         @http = Net::HTTP.new(uri.host, uri.port)
-        @http.use_ssl = true
       end
 
 
       def request_method(params)
         connection()
+        body = params.to_xml
         request = Net::HTTP::Post.new(@uri.request_uri)
         request['content-type'] = 'text/xml'
-        request['content-length'] = params.to_s.size
-        request.body = params.to_xml
+        request['content-length'] = body.size
+        request.body = body
         response = @http.request(request)
 
         raise ApiError.new("401 Unauthorized") if response.code.to_i == 401
