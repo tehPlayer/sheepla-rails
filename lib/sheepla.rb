@@ -16,23 +16,20 @@ module Sheepla
       @api_key = api_key
     end
 
-    def get_metro_stations
-      connection('getMetroStations')
-      body = Nokogiri::XML::Builder.new(encoding: 'utf-8') do |xml|
-        xml.getMetroStationsRequest xmlns: "http://www.sheepla.pl/webapi/1_0" do
-          authentication(xml)
-        end
-      end
-
-      request_method(body)
-    end
-
     def create_order(params)
       order = params.clone.deep_stringify_keys
       raise ApiError.new("Order parameters don't contain all obligatory keys") unless validate_order(order)
 
       connection('createOrder')
       request_method(build_order(order))
+    end
+
+    def add_shipment_to_order(external_order_id)
+      connection('addShipmentToOrder')
+
+      body = Nokogiri::XML::Builder.new()
+
+      request_method()
     end
 
     protected
@@ -69,51 +66,57 @@ module Sheepla
         Hash.from_xml(response.body)
       end
 
-      def build_order(order)
+      def body_wrapper(method, &block)
         Nokogiri::XML::Builder.new(encoding: 'utf-8') do |xml|
-          xml.createOrderRequest xmlns: "http://www.sheepla.pl/webapi/1_0" do
+          xml.send(method, xmlns: "http://www.sheepla.pl/webapi/1_0") do
             authentication(xml)
-            xml.orders do
-              xml.order do
-                xml.orderValue order['order_value']
-                xml.orderValueCurrency order['order_currency']
-                xml.externalDeliveryTypeId order['external_delivery_type_id']
-                xml.externalDeliveryTypeName order['external_delivery_type_name']
-                xml.externalPaymentTypeId order['external_payment_type_id']
-                xml.externalPaymentTypeName order['external_payment_type_name']
-                xml.externalCarrierName order['external_carrier_name']
-                xml.externalCarrierId order['external_carrier_id']
-                xml.externalCountryId order['external_country_id']
-                xml.externalBuyerId order['external_buyer_id']
-                xml.externalOrderId order['external_order_id']
-                xml.shipmentTemplate order['shipment_template']
-                xml.comments order['comments']
-                xml.createdOn order['created_on'].to_s
-                xml.deliveryPrice order['delivery_price']
-                xml.deliveryPriceCurrency order['delivery_price_currency']
-                xml.deliveryAddress do
-                  xml.street order['delivery_address']['street']
-                  xml.zipCode order['delivery_address']['zip_code']
-                  xml.city order['delivery_address']['city']
-                  xml.countryAlpha2Code order['delivery_address']['country_alpha2_code']
-                  xml.firstName order['delivery_address']['first_name']
-                  xml.lastName order['delivery_address']['last_name']
-                  xml.companyName order['delivery_address']['company_name']
-                  xml.phone order['delivery_address']['phone']
-                  xml.email order['delivery_address']['email']
-                end
-                xml.deliveryOptions do
-                  xml.cod order['delivery_options'].delete('cod')
-                  xml.insurance order['delivery_options'].delete('insurance')
-                  order['delivery_options'].each do |delivery_partner, delivery_partner_data|
-                    xml.send(delivery_partner) do
-                      delivery_partner_data.each do |k,v|
-                        xml.send(k, v)
-                      end
+            yield
+          end
+        end
+      end
+
+      def build_order(order)
+        body_wrapper('CreateOrder') do |xml|
+          xml.orders do
+            xml.order do
+              xml.orderValue order['order_value']
+              xml.orderValueCurrency order['order_currency']
+              xml.externalDeliveryTypeId order['external_delivery_type_id']
+              xml.externalDeliveryTypeName order['external_delivery_type_name']
+              xml.externalPaymentTypeId order['external_payment_type_id']
+              xml.externalPaymentTypeName order['external_payment_type_name']
+              xml.externalCarrierName order['external_carrier_name']
+              xml.externalCarrierId order['external_carrier_id']
+              xml.externalCountryId order['external_country_id']
+              xml.externalBuyerId order['external_buyer_id']
+              xml.externalOrderId order['external_order_id']
+              xml.shipmentTemplate order['shipment_template']
+              xml.comments order['comments']
+              xml.createdOn order['created_on'].to_s
+              xml.deliveryPrice order['delivery_price']
+              xml.deliveryPriceCurrency order['delivery_price_currency']
+              xml.deliveryAddress do
+                xml.street order['delivery_address']['street']
+                xml.zipCode order['delivery_address']['zip_code']
+                xml.city order['delivery_address']['city']
+                xml.countryAlpha2Code order['delivery_address']['country_alpha2_code']
+                xml.firstName order['delivery_address']['first_name']
+                xml.lastName order['delivery_address']['last_name']
+                xml.companyName order['delivery_address']['company_name']
+                xml.phone order['delivery_address']['phone']
+                xml.email order['delivery_address']['email']
+              end
+              xml.deliveryOptions do
+                xml.cod order['delivery_options'].delete('cod')
+                xml.insurance order['delivery_options'].delete('insurance')
+                order['delivery_options'].each do |delivery_partner, delivery_partner_data|
+                  xml.send(delivery_partner) do
+                    delivery_partner_data.each do |k,v|
+                      xml.send(k, v)
                     end
                   end
-                end if order['delivery_options']
-              end
+                end
+              end if order['delivery_options']
             end
           end
         end
