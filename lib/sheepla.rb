@@ -44,6 +44,7 @@ module Sheepla
       def connection
         @uri = URI.parse(BASE_URL)
         @http = Net::HTTP.new(uri.host, uri.port)
+        @http.use_ssl = true
       end
 
 
