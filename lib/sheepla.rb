@@ -27,8 +27,6 @@ module Sheepla
     def add_shipment_to_order(external_order_id)
       connection('addShipmentToOrder')
 
-      body = Nokogiri::XML::Builder.new()
-
       request_method()
     end
 
@@ -70,7 +68,7 @@ module Sheepla
         Nokogiri::XML::Builder.new(encoding: 'utf-8') do |xml|
           xml.send(method, xmlns: "http://www.sheepla.pl/webapi/1_0") do
             authentication(xml)
-            yield
+            yield xml
           end
         end
       end
