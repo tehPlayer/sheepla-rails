@@ -27,7 +27,15 @@ module Sheepla
     def add_shipment_to_order(external_order_id)
       connection('addShipmentToOrder')
 
-      request_method()
+      body = body_wrapper('addShipmentToOrderRequest') do |xml|
+        xml.orders do
+          xml.order do
+            xml.externalOrderId external_order_id
+          end
+        end
+      end
+
+      request_method(body)
     end
 
     protected
@@ -64,7 +72,7 @@ module Sheepla
         Hash.from_xml(response.body)
       end
 
-      def body_wrapper(method, &block)
+      def body_wrapper(method)
         Nokogiri::XML::Builder.new(encoding: 'utf-8') do |xml|
           xml.send(method, xmlns: "http://www.sheepla.pl/webapi/1_0") do
             authentication(xml)
@@ -74,7 +82,7 @@ module Sheepla
       end
 
       def build_order(order)
-        body_wrapper('CreateOrder') do |xml|
+        body_wrapper('createOrderRequest') do |xml|
           xml.orders do
             xml.order do
               xml.orderValue order['order_value']
