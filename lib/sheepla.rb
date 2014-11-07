@@ -16,6 +16,7 @@ module Sheepla
     end
 
     def get_metro_stations
+      connection('getMetroStationsRequest')
       body = Nokogiri::XML::Builder.new do |xml|
         xml.getMetroStationsRequest xmlns: "http://www.sheepla.pl/webapi/1_0" do
           authentication(xml)
@@ -26,6 +27,7 @@ module Sheepla
     end
 
     def order_synchronization(params)
+      connection('createOrderRequest')
       body = Nokogiri::XML::Builder.new do |xml|
         authentication(xml)
       end
@@ -41,15 +43,14 @@ module Sheepla
         end
       end
 
-      def connection
-        @uri = URI.parse(BASE_URL)
+      def connection(method)
+        @uri = URI.parse(BASE_URL + method)
         @http = Net::HTTP.new(uri.host, uri.port)
         @http.use_ssl = true
       end
 
 
       def request_method(params)
-        connection()
         body = params.to_xml
         request = Net::HTTP::Post.new(@uri.request_uri)
         request['content-type'] = 'text/xml'
