@@ -5,13 +5,13 @@ This is a Ruby Gem for Sheepla XML API.
 
 ## Instalation
 
-```
+```console
 gem install sheepla
 ```
 
 or add it to your `Gemfile`:
 
-```
+```ruby
 gem 'sheepla'
 ```
 
@@ -19,13 +19,13 @@ gem 'sheepla'
 
 Create instance of gem:
 
-```
+```ruby
 sheepla = Sheepla::API.new('YOUR_ADMINISTRATION_API_KEY')
 ```
 
 Then create order using all required parameters, as stated in documentation of Sheepla API.
 
-```
+```ruby
 sample_data = {
   order_value: 299,
   order_currency: 'PLN',
@@ -61,7 +61,7 @@ sheepla.create_order(sample_data)
 
 After that, just add shipment to order, using external_order_id:
 
-```
+```ruby
 sheepla.add_shipment_to_order('ah-200-abc')
 ```
 
