@@ -2,7 +2,6 @@ require 'rubygems'
 require 'net/https'
 require 'uri'
 require 'nokogiri'
-require 'ostruct'
 
 module Sheepla
   class ApiError < StandardError; end
@@ -17,7 +16,7 @@ module Sheepla
     end
 
     def create_order(params)
-      order = params.clone.deep_stringify_keys
+      order = params.deep_stringify_keys
       raise ApiError.new("Order parameters don't contain all obligatory keys") unless validate_order(order)
 
       connection('createOrder')
