@@ -152,32 +152,32 @@ module Sheepla
       end
 
       def validate_order(params)
-        params['order_value'] &&
-        params['order_currency'] &&
-        params['external_delivery_type_id'] &&
-        params['external_delivery_type_name'] &&
-        params['external_payment_type_id'] &&
-        params['external_payment_type_name'] &&
-        params['external_carrier_id'] &&
-        params['external_carrier_name'] &&
-        params['external_country_id'] &&
-        params['external_buyer_id'] &&
-        params['external_order_id'] &&
-        params['shipment_template'] &&
+        params['orderValue'] &&
+        params['orderCurrency'] &&
+        params['externalDeliveryTypeId'] &&
+        params['externalDeliveryTypeName'] &&
+        params['externalPaymentTypeId'] &&
+        params['externalPaymentTypeName'] &&
+        params['externalCarrierId'] &&
+        params['externalCarrierName'] &&
+        params['externalCountryId'] &&
+        params['externalBuyerId'] &&
+        params['externalOrderId'] &&
+        params['shipmentTemplate'] &&
         params['comments'] &&
-        params['created_on'] &&
-        params['delivery_price'] &&
-        params['delivery_price_currency'] &&
-        params['delivery_address'] &&
-        params['delivery_address']['street'] &&
-        params['delivery_address']['zip_code'] &&
-        params['delivery_address']['city'] &&
-        params['delivery_address']['country_alpha2_code'] &&
-        params['delivery_address']['first_name'] &&
-        params['delivery_address']['last_name'] &&
-        params['delivery_address']['company_name'] &&
-        params['delivery_address']['phone'] &&
-        params['delivery_address']['email']
+        params['createdOn'] &&
+        params['deliveryPrice'] &&
+        params['deliveryPriceCurrency'] &&
+        params['deliveryAddress'] &&
+        params['deliveryAddress']['street'] &&
+        params['deliveryAddress']['zipCode'] &&
+        params['deliveryAddress']['city'] &&
+        params['deliveryAddress']['countryAlpha2Code'] &&
+        params['deliveryAddress']['firstName'] &&
+        params['deliveryAddress']['lastName'] &&
+        params['deliveryAddress']['companyName'] &&
+        params['deliveryAddress']['phone'] &&
+        params['deliveryAddress']['email']
       end
   end
 end
