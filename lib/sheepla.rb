@@ -16,7 +16,8 @@ module Sheepla
     end
 
     def create_order(params)
-      order = params.deep_stringify_keys
+      order = params.deep_transform_keys{ |key| key.to_s.camelize(:lower) }
+
       raise ApiError.new("Order parameters don't contain all obligatory keys") unless validate_order(order)
 
       connection('createOrder')
@@ -84,36 +85,36 @@ module Sheepla
         body_wrapper('createOrderRequest') do |xml|
           xml.orders do
             xml.order do
-              xml.orderValue order['order_value']
-              xml.orderValueCurrency order['order_currency']
-              xml.externalDeliveryTypeId order['external_delivery_type_id']
-              xml.externalDeliveryTypeName order['external_delivery_type_name']
-              xml.externalPaymentTypeId order['external_payment_type_id']
-              xml.externalPaymentTypeName order['external_payment_type_name']
-              xml.externalCarrierName order['external_carrier_name']
-              xml.externalCarrierId order['external_carrier_id']
-              xml.externalCountryId order['external_country_id']
-              xml.externalBuyerId order['external_buyer_id']
-              xml.externalOrderId order['external_order_id']
-              xml.shipmentTemplate order['shipment_template']
-              xml.comments order['comments']
-              xml.createdOn order['created_on'].to_s
-              xml.deliveryPrice order['delivery_price']
-              xml.deliveryPriceCurrency order['delivery_price_currency']
-              xml.deliveryAddress do
-                xml.street order['delivery_address']['street']
-                xml.zipCode order['delivery_address']['zip_code']
-                xml.city order['delivery_address']['city']
-                xml.countryAlpha2Code order['delivery_address']['country_alpha2_code']
-                xml.firstName order['delivery_address']['first_name']
-                xml.lastName order['delivery_address']['last_name']
-                xml.companyName order['delivery_address']['company_name']
-                xml.phone order['delivery_address']['phone']
-                xml.email order['delivery_address']['email']
-              end
-              add_order_items(xml, order['order_items'])
-              add_delivery_options(xml, order['delivery_options']) if order['delivery_options']
+              add_delivery_address(xml, order.delete('deliveryAddress'))
+              add_order_items(xml, order.delete('orderItems')) if order['orderItems']
+              add_delivery_options(xml, order.delete('deliveryOptions')) if order['deliveryOptions']
+              add_other_order_data(xml, order)
+              # xml.orderValue order['order_value']
+              # xml.orderValueCurrency order['order_currency']
+              # xml.externalDeliveryTypeId order['external_delivery_type_id']
+              # xml.externalDeliveryTypeName order['external_delivery_type_name']
+              # xml.externalPaymentTypeId order['external_payment_type_id']
+              # xml.externalPaymentTypeName order['external_payment_type_name']
+              # xml.externalCarrierName order['external_carrier_name']
+              # xml.externalCarrierId order['external_carrier_id']
+              # xml.externalCountryId order['external_country_id']
+              # xml.externalBuyerId order['external_buyer_id']
+              # xml.externalOrderId order['external_order_id']
+              # xml.shipmentTemplate order['shipment_template']
+              # xml.comments order['comments']
+              # xml.createdOn order['created_on'].to_s
+              # xml.deliveryPrice order['delivery_price']
+              # xml.deliveryPriceCurrency order['delivery_price_currency']
+
             end
+          end
+        end
+      end
+
+      def add_delivery_address(xml, delivery_address)
+        xml.deliveryAddress do
+          delivery_address.each do |delivery_key, delivery_value|
+            xml.send(delivery_key, delivery_value)
           end
         end
       end
@@ -142,6 +143,12 @@ module Sheepla
             end
           end
         end 
+      end
+
+      def add_other_order_data(xml, order_data)
+        order_data.each do |k,v|
+          xml.send(k, v)
+        end        
       end
 
       def validate_order(params)
