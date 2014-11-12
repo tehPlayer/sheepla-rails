@@ -85,7 +85,7 @@ module Sheepla
         address = order.delete('deliveryAddress')
         items = order.delete('orderItems') 
         options = order.delete('deliveryOptions')
-        
+
         body_wrapper('createOrderRequest') do |xml|
           xml.orders do
             xml.order do
@@ -158,7 +158,7 @@ module Sheepla
 
       def validate_order(params)
         params['orderValue'] &&
-        params['orderCurrency'] &&
+        params['orderValueCurrency'] &&
         params['externalDeliveryTypeId'] &&
         params['externalDeliveryTypeName'] &&
         params['externalPaymentTypeId'] &&

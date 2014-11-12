@@ -4,7 +4,7 @@ class SheeplaTest < ActiveSupport::TestCase
   test "data" do
     sample_data = {
       order_value: 299,
-      order_currency: "PLN",
+      order_value_currency: "PLN",
       external_delivery_type_id: "07",
       external_delivery_type_name: "DHL AH",
       external_payment_type_id: "pp",
