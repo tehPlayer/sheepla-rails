@@ -82,13 +82,18 @@ module Sheepla
       end
 
       def build_order(order)
+        address = order.delete('deliveryAddress')
+        items = order.delete('orderItems') 
+        options = order.delete('deliveryOptions')
+        
         body_wrapper('createOrderRequest') do |xml|
           xml.orders do
             xml.order do
-              add_delivery_address(xml, order.delete('deliveryAddress'))
-              add_order_items(xml, order.delete('orderItems')) if order['orderItems']
-              add_delivery_options(xml, order.delete('deliveryOptions')) if order['deliveryOptions']
               add_other_order_data(xml, order)
+
+              add_delivery_address(xml, address)
+              add_order_items(xml, items) if items
+              add_delivery_options(xml, options) if options
               # xml.orderValue order['order_value']
               # xml.orderValueCurrency order['order_currency']
               # xml.externalDeliveryTypeId order['external_delivery_type_id']
