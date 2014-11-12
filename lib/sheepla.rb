@@ -112,20 +112,37 @@ module Sheepla
                 xml.phone order['delivery_address']['phone']
                 xml.email order['delivery_address']['email']
               end
-              xml.deliveryOptions do
-                xml.cod order['delivery_options'].delete('cod')
-                xml.insurance order['delivery_options'].delete('insurance')
-                order['delivery_options'].each do |delivery_partner, delivery_partner_data|
-                  xml.send(delivery_partner) do
-                    delivery_partner_data.each do |k,v|
-                      xml.send(k, v)
-                    end
-                  end
-                end
-              end if order['delivery_options']
+              add_order_items(xml, order['order_items'])
+              add_delivery_options(xml, order['delivery_options']) if order['delivery_options']
             end
           end
         end
+      end
+
+      def add_order_items(xml, order_items)
+        xml.orderItems do
+          order_items.each do |order_item|
+            xml.orderItem do
+              order_item.each do |k, v|
+                xml.send(k, v)
+              end
+            end
+          end
+        end
+      end
+
+      def add_delivery_options(xml, delivery_options)
+        xml.deliveryOptions do
+          xml.cod delivery_options.delete('cod')
+          xml.insurance delivery_options.delete('insurance')
+          delivery_options.each do |delivery_partner, delivery_partner_data|
+            xml.send(delivery_partner) do
+              delivery_partner_data.each do |k,v|
+                xml.send(k, v)
+              end
+            end
+          end
+        end 
       end
 
       def validate_order(params)

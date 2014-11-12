@@ -9,16 +9,16 @@ Gem::Specification.new do |s|
   s.version     = Sheepla::VERSION
   s.authors     = ["Marcin Jan Adamczyk"]
   s.email       = ["marcin.adamczyk@subcom.me"]
-  s.homepage    = "http://www.subcom.me/"
-  s.summary     = "Sheepla API wrapper"
-  s.description = "Sheepla API wrapper"
+  s.homepage    = "https://github.com/tehPlayer/sheepla-ruby"
+  s.summary     = "Sheepla XML API wrapper"
+  s.description = "Sheepla XML API wrapper"
   s.license     = "MIT"
 
   s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.rdoc"]
   s.test_files = Dir["test/**/*"]
 
-  s.add_dependency "nokogiri", "~> 1.6.4"
-  s.add_dependency "rails", "~> 4.0.0"
+  s.add_dependency "nokogiri", '~> 1.6', '>= 1.6.4'
+  s.add_dependency "rails", "~> 4.0"
 
   s.add_development_dependency "sqlite3"
 end
