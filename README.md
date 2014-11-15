@@ -80,7 +80,7 @@ Then create order using all required parameters, as stated in documentation of S
           volume: "0.001",
           priceGross: "1000",
           orderItemDiscountType: "orderItemDiscountType2",
-          orderItemDiscountValue: "-79228162514264337593543950335",
+          orderItemDiscountValue: "-5",
           ean13: "7647984612122",
           issn: "9223372036854775807"
         }
