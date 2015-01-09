@@ -1,4 +1,4 @@
-sheepla-ruby
+sheepla-rails
 ===================
 
 This is a Ruby Gem for Sheepla XML API.
