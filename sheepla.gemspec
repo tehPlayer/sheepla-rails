@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.version     = Sheepla::VERSION
   s.authors     = ["Marcin Jan Adamczyk"]
   s.email       = ["marcin.adamczyk@subcom.me"]
-  s.homepage    = "https://github.com/tehPlayer/sheepla-ruby"
+  s.homepage    = "https://github.com/tehPlayer/sheepla-rails"
   s.summary     = "Sheepla XML API wrapper"
   s.description = "Sheepla XML API wrapper"
   s.license     = "MIT"
