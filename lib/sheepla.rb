@@ -18,7 +18,7 @@ module Sheepla
     def create_order(params)
       order = params.deep_transform_keys{ |key| key.to_s.camelize(:lower) }
 
-      raise ApiError.new("Order parameters don't contain all obligatory keys") unless validate_order(order)
+      # raise ApiError.new("Order parameters don't contain all obligatory keys") unless validate_order(order)
 
       connection('createOrder')
       request_method(build_order(order))
@@ -94,23 +94,6 @@ module Sheepla
               add_delivery_address(xml, address)
               add_order_items(xml, items) if items
               add_delivery_options(xml, options) if options
-              # xml.orderValue order['order_value']
-              # xml.orderValueCurrency order['order_currency']
-              # xml.externalDeliveryTypeId order['external_delivery_type_id']
-              # xml.externalDeliveryTypeName order['external_delivery_type_name']
-              # xml.externalPaymentTypeId order['external_payment_type_id']
-              # xml.externalPaymentTypeName order['external_payment_type_name']
-              # xml.externalCarrierName order['external_carrier_name']
-              # xml.externalCarrierId order['external_carrier_id']
-              # xml.externalCountryId order['external_country_id']
-              # xml.externalBuyerId order['external_buyer_id']
-              # xml.externalOrderId order['external_order_id']
-              # xml.shipmentTemplate order['shipment_template']
-              # xml.comments order['comments']
-              # xml.createdOn order['created_on'].to_s
-              # xml.deliveryPrice order['delivery_price']
-              # xml.deliveryPriceCurrency order['delivery_price_currency']
-
             end
           end
         end
@@ -156,33 +139,35 @@ module Sheepla
         end        
       end
 
-      def validate_order(params)
-        params['orderValue'] &&
-        params['orderValueCurrency'] &&
-        params['externalDeliveryTypeId'] &&
-        params['externalDeliveryTypeName'] &&
-        params['externalPaymentTypeId'] &&
-        params['externalPaymentTypeName'] &&
-        params['externalCarrierId'] &&
-        params['externalCarrierName'] &&
-        params['externalCountryId'] &&
-        params['externalBuyerId'] &&
-        params['externalOrderId'] &&
-        params['shipmentTemplate'] &&
-        params['comments'] &&
-        params['createdOn'] &&
-        params['deliveryPrice'] &&
-        params['deliveryPriceCurrency'] &&
-        params['deliveryAddress'] &&
-        params['deliveryAddress']['street'] &&
-        params['deliveryAddress']['zipCode'] &&
-        params['deliveryAddress']['city'] &&
-        params['deliveryAddress']['countryAlpha2Code'] &&
-        params['deliveryAddress']['firstName'] &&
-        params['deliveryAddress']['lastName'] &&
-        params['deliveryAddress']['companyName'] &&
-        params['deliveryAddress']['phone'] &&
-        params['deliveryAddress']['email']
-      end
+      # Sheepla API has many possibilities with validation
+      #
+      # def validate_order(params)
+      #   params['orderValue'] &&
+      #   params['orderValueCurrency'] &&
+      #   params['externalDeliveryTypeId'] &&
+      #   params['externalDeliveryTypeName'] &&
+      #   params['externalPaymentTypeId'] &&
+      #   params['externalPaymentTypeName'] &&
+      #   params['externalCarrierId'] &&
+      #   params['externalCarrierName'] &&
+      #   params['externalCountryId'] &&
+      #   params['externalBuyerId'] &&
+      #   params['externalOrderId'] &&
+      #   params['shipmentTemplate'] &&
+      #   params['comments'] &&
+      #   params['createdOn'] &&
+      #   params['deliveryPrice'] &&
+      #   params['deliveryPriceCurrency'] &&
+      #   params['deliveryAddress'] &&
+      #   params['deliveryAddress']['street'] &&
+      #   params['deliveryAddress']['zipCode'] &&
+      #   params['deliveryAddress']['city'] &&
+      #   params['deliveryAddress']['countryAlpha2Code'] &&
+      #   params['deliveryAddress']['firstName'] &&
+      #   params['deliveryAddress']['lastName'] &&
+      #   params['deliveryAddress']['companyName'] &&
+      #   params['deliveryAddress']['phone'] &&
+      #   params['deliveryAddress']['email']
+      # end
   end
 end
